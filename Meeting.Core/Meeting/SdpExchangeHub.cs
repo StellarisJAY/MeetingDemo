@@ -2,6 +2,7 @@
 using Meeting.Core.Models.DTO;
 using Meeting.Core.Services;
 using Microsoft.AspNetCore.SignalR;
+using SIPSorcery.Net;
 
 namespace Meeting.Core.Meeting
 {
@@ -42,6 +43,7 @@ namespace Meeting.Core.Meeting
             // 设置服务器端ICE Candidate处理
             conn.SetOnIceCandidate(async (candidate) =>
             {
+                conn.PeerConnection.addLocalIceCandidate(candidate);
                 await caller.SendAsync("ServerIceCandidate", candidate.toJSON());
             });
 
@@ -79,6 +81,14 @@ namespace Meeting.Core.Meeting
                 await Clients.Caller.SendAsync("SdpExchangeError", "peer connection not created");
                 return;
             }
+            bool flag = RTCIceCandidateInit.TryParse(message, out var candidate);
+            if (!flag)
+            {
+                await Clients.Caller.SendAsync("SdpExchangeError", "invalid ice candidate");
+                return;
+            }
+            userConn.PeerConnection.addIceCandidate(candidate);
+            return;
         }
     }
 }

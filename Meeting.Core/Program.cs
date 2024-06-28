@@ -30,7 +30,17 @@ builder.Services.AddScoped<RoomDAO>();
 // Services
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddSingleton<SessionManager>();
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowCredentials();
+        });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
