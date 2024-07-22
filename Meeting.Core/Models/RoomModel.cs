@@ -16,5 +16,7 @@
         public int Accessible { get; set; }
 
         public string? Password { get; set; }
+
+        public static string CacheKey(long id) => $"/meeting/room/{id}";
     }
 }

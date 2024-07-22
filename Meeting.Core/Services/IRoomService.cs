@@ -8,5 +8,7 @@ namespace Meeting.Core.Services
         Task<CommonResult<RoomModel>> CreateRoom(AddRoomDTO dto);
 
         Task<CommonResult<RoomModel>> GetRoomDetail(long roomID);
+
+        Task<CommonResult<RoomModel>> UpdateRoom(UpdateRoomDTO dto);
     }
 }

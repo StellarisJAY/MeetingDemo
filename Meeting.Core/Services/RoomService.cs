@@ -2,7 +2,6 @@
 using Meeting.Core.DAO;
 using Meeting.Core.Models;
 using Meeting.Core.Models.DTO;
-using System.Security.Cryptography;
 
 namespace Meeting.Core.Services
 {
@@ -61,6 +60,19 @@ namespace Meeting.Core.Services
                 result.Message = "查询失败，房间不存在";
             }
             result.Data = model;
+            return result;
+        }
+
+        async Task<CommonResult<RoomModel>> IRoomService.UpdateRoom(UpdateRoomDTO dto)
+        {
+            CommonResult<RoomModel> result = new() { Code = 200, Message = "修改成功" };
+            RoomModel model = _mapper.Map<RoomModel>(dto);
+            bool flag = await _roomDAO.UpdateRoomDetail(model);
+            if (!flag)
+            {
+                result.Code = 404;
+                result.Message = "修改失败";
+            }
             return result;
         }
     }
